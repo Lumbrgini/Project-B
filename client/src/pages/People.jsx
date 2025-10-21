@@ -1,7 +1,11 @@
+import { useTranslation } from 'react-i18next';
+
 function People() {
+  const { t } = useTranslation();
+
   return (
     <>
-      <h1>People-showing</h1>
+      <h1>{t('people.title')}</h1>
     </>
   )
 }
