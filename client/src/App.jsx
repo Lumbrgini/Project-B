@@ -1,19 +1,29 @@
 import './App.css'
 import { useTranslation } from 'react-i18next';
 import { Outlet } from "react-router-dom";  
+import { Layout, Button } from 'antd';
+
+
 
 function App() {
   const { t , i18n } = useTranslation();
+  const { Header, Content, Footer } = Layout;
 
   return (
-    <>
-      <h2>{t('app.title')}</h2>
-      <Outlet />
-      <div>
-        <button onClick={() => i18n.changeLanguage('de')}>DE</button>
-        <button onClick={() => i18n.changeLanguage('en')}>EN</button>
-      </div>
-    </>
+    <Layout style={{minHeight: '100vh', minWidth: '100vw'}}>
+      <Header>
+        <h2>{t('app.title')}</h2>
+      </Header>
+      <Content>
+        <Outlet />
+      </Content>
+      <Footer>
+        <div>
+          <Button color="default" variant={i18n.language === 'de' ? 'outlined' : 'dashed'} onClick={() => i18n.changeLanguage('de')}>DE</Button>
+          <Button color="default" variant={i18n.language === 'en' ? 'outlined' : 'dashed'} onClick={() => i18n.changeLanguage('en')}>EN</Button>
+        </div>
+      </Footer>
+    </Layout>
   )
 }
 
