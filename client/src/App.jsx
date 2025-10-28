@@ -2,8 +2,7 @@ import './App.css'
 import { useTranslation } from 'react-i18next';
 import { Outlet } from "react-router-dom";  
 import { Layout, Button } from 'antd';
-
-
+import Nav from './components/nav/nav.jsx';
 
 function App() {
   const { t , i18n } = useTranslation();
@@ -12,9 +11,10 @@ function App() {
   return (
     <Layout style={{minHeight: '100vh', minWidth: '100vw'}}>
       <Header>
-        <h2>{t('app.title')}</h2>
+          <Nav/>
       </Header>
       <Content>
+        <h2>{t('app.title')}</h2>
         <Outlet />
       </Content>
       <Footer>
