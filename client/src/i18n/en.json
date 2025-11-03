@@ -2,7 +2,9 @@
     "app.title": "This is the App.jsx page where the genreal layout is defined",
     "home.title": "This is the Home.jsx, here the landing page will be made",
     "people.title": "People will be displayed here",
+    "people.error": "Something went wrong during request of the scoreboard",
     "404.title": "Oops, something went wrong...",
+    "add_drink.title": "Add a Drink",
     "nav.buttons.dashboard": "Dashboard",
     "nav.buttons.scoreboard": "Scoreboard"
 }
