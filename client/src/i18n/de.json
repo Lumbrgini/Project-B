@@ -2,7 +2,9 @@
     "app.title": "Das ist App.jsx, hier wird das generelle layout vorgegeben",
     "home.title": "Das ist Home.jsx, hier wird die landing page entstehen",
     "people.title": "Nutzer werden hier angezeigt",
+    "people.error": "Etwas ist beim Request von der Rangliste schiefgelaufen",
     "404.title": "Ups, hier ist etwas schiefgelaufen",
+    "add_drink.title": "Getränk Hinzufügen",
     "nav.buttons.dashboard": "Dashboard",
     "nav.buttons.scoreboard": "Rangliste"
 }

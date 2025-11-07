@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import AddDrinkOverlay from '../components/addDrinkOverlay/addDrinkOverlay';
 
    
 
@@ -7,6 +8,7 @@ function Home() {
     return (
         <>
             <h1>{t('home.title')}</h1>
+            <AddDrinkOverlay/>
         </>
     )
 }
