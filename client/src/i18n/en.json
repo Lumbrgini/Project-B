@@ -6,6 +6,10 @@
     "404.title": "Oops, something went wrong...",
     "add_drink.title": "Add a Drink",
     "nav.buttons.dashboard": "Dashboard",
-    "nav.buttons.scoreboard": "Scoreboard"
-    "add_drink.title": "Add a Drink"
+    "nav.buttons.scoreboard": "Scoreboard",
+    "add_drink.title": "Add a Drink",
+    "add_drink.name_label": "Name:",
+    "add_drink.volume_placeholder": "Volume",
+    "add_drink.abv_placeholder": "ABV %",
+    "add_drink.add_liquid_label": "+ Add Liquid"
 }

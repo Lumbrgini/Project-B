@@ -1,10 +1,10 @@
 import './addDrinkOverlay.module.css'
 import { useState } from 'react';
-import { Modal, Form, Input, InputNumber, Select, Button, Space } from 'antd';
+import { Modal, Form, Flex, InputNumber, Select, Button, Space } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useAlcCalc } from '/src/hooks/useAlcCalc'
 
-const AddDrinkOverlay = (onClose) => {
+const AddDrinkOverlay = ({afterCloseHandler}) => {
     const { t } = useTranslation();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
@@ -25,7 +25,6 @@ const AddDrinkOverlay = (onClose) => {
             console.log(payload.ingredients)
             form.resetFields();
 
-            onClose;
             setIsModalOpen(false);
         } catch (err) {
             console.log(err)
@@ -39,7 +38,7 @@ const AddDrinkOverlay = (onClose) => {
     return (
         <>
             <Button type="primary" onClick={showModal}>
-                add a drink
+                {t('add_drink.title')}
             </Button>
             <Modal
                 title={t('add_drink.title')}
@@ -47,30 +46,34 @@ const AddDrinkOverlay = (onClose) => {
                 open={isModalOpen}
                 onOk={handleOk}
                 onCancel={handleCancel}
+                afterClose={afterCloseHandler}
+                centered
+                width={{ xs: '90%', sm: '80%', md: '70%', lg: '60%', xl: '50%',xxl: '40%', }}
             >
-                <Form layout="vertical" form={form} initialValues={{ name: '', ingredients: [{ volume: null, unit: 'ml', abv: null }]}}>
-                    <Form.Item  label="Drink Name" name="name" rules={[{require: true}]}>
-                        <input type="text" placeholder="e.g., Mojito"/>
+                
+                <Form layout="horizontal" form={form} initialValues={{ name: '', ingredients: [{ volume: null, unit: 'ml', abv: null }]}}>
+                    <Form.Item  label={t('add_drink.name_label')} name="name" rules={[{ required: true, message: 'Please enter a name' }]}>
+                        <input type="text" placeholder="Mojito"/>
                     </Form.Item>
                     <Form.List name="ingredients" >
                         {(fields, { add, remove }) => (
                             <>
                                 {fields.map(({ key, name, ...restField }) => (
                                     <Space key={key} align="baseline">
-                                        <Form.Item {...restField} name={[name, 'volume']} rules={[{ required: true }]}>
-                                            <InputNumber placeholder="Volume" min={0} style={{ width: 100 }} />
+                                        <Form.Item {...restField} name={[name, 'volume']} rules={[{ required: true, message: 'Enter a Volume' }]}>
+                                            <InputNumber placeholder={t('add_drink.volume_placeholder')} min={0} style={{ width: 100 }} />
                                         </Form.Item>
 
                                         <Form.Item {...restField} name={[name, 'unit']} >
                                             <Select style={{ width: 80 }}>
-                                                <Select.Option value="ml">ml</Select.Option>
-                                                <Select.Option value="l">L</Select.Option>
-                                                <Select.Option value="oz">oz</Select.Option>
+                                                <Select.Option value='ml'>ml</Select.Option>
+                                                <Select.Option value='l'>L</Select.Option>
+                                                <Select.Option value='oz'>oz</Select.Option>
                                             </Select>
                                         </Form.Item>
 
-                                        <Form.Item {...restField} name={[name, 'abv']} rules={[{ required: true }]} >
-                                            <InputNumber placeholder="ABV %" min={0} max={100} style={{ width: 100 }} />
+                                        <Form.Item {...restField} name={[name, 'abv']} rules={[{ required: true, message: 'Enter Alcohol Content' }]} >
+                                            <InputNumber placeholder={t('add_drink.abv_placeholder')} min={0} max={100} style={{ width: 100 }} />
                                         </Form.Item>
 
                                         <Button onClick={() => remove(name)} type="link" danger>Remove</Button>
@@ -78,8 +81,8 @@ const AddDrinkOverlay = (onClose) => {
                                 ))}
 
                                 <Form.Item>
-                                <Button type="dashed" onClick={() => add()} block>
-                                    + Add Liquid
+                                <Button type="dashed" onClick={() => add({ volume: null, unit: 'ml', abv: null })} block>
+                                    {t('add_drink.add_liquid_label')}
                                 </Button>
                                 </Form.Item>
                             </>

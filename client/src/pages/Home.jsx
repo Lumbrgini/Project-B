@@ -12,7 +12,7 @@ function Home() {
     return (
         <>
             <h1>{t('home.title')}</h1>
-            <AddDrinkOverlay onClose={handleDrinkAdded} />
+            <AddDrinkOverlay afterCloseHandler={handleDrinkAdded} />
         </>
     )
 }
