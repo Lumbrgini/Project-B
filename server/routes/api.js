@@ -20,7 +20,6 @@ const testington1 = {
           abv: "30",
         }
       ],
-      crates: 0.41666
     },
     {
       name: "Mystery Mix 2",
@@ -36,7 +35,6 @@ const testington1 = {
           abv: "30",
         }
       ],
-      crates: 0.41666
     }
   ]
 }
@@ -52,7 +50,6 @@ const testington2 = {
           unit: "ml",
           abv: "5",
       }],
-      crates: 0.41666
     }
   ]
 }

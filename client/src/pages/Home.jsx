@@ -13,43 +13,27 @@ const handleDrinkAdded = () => {
 const userData = {
     id: 1,
     name: "Tester Testington1",
-    height: "180",
-    wight: "80",
-    age: "25",
+    height: 180,
+    wight: 80,
+    age: 25,
     drinks: [
         {
-        name: "Mystery Mix",
-        timestamp: Date.now(),
-        ingredients: [
-            {
-            volume: "0.25",
-            unit: "ml",
-            abv: "0",
-            },
-            {
-            volume: "0.25",
-            unit: "ml",
-            abv: "30",
-            }
-        ],
-        crates: 0.41666
+            name: "Mystery Beer 1",
+            timestamp: Date.now(),
+            ingredients: [{
+                volume: 0.33,
+                unit: "l",
+                abv: 5,
+            }],
         },
         {
-        name: "Mystery Mix 2",
-        timestamp: Date.now(),
-        ingredients: [
-            {
-            volume: "0.25",
-            unit: "ml",
-            abv: "0",
-            },
-            {
-            volume: "0.25",
-            unit: "ml",
-            abv: "30",
-            }
-        ],
-        crates: 0.41666
+            name: "Mystery Beer 2",
+            timestamp: Date.now(),
+            ingredients: [{
+                volume: 0.33,
+                unit: "l",
+                abv: 5,
+            }],
         }
     ]
 }

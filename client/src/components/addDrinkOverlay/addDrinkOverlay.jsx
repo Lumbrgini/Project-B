@@ -2,13 +2,13 @@ import './addDrinkOverlay.module.css'
 import { useState } from 'react';
 import { Modal, Form, Flex, InputNumber, Select, Button, Space } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { useAlcCalc } from '/src/hooks/useAlcCalc'
+
 
 const AddDrinkOverlay = ({afterCloseHandler}) => {
     const { t } = useTranslation();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
-    const { calculateCrates } = useAlcCalc();
+
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -17,11 +17,10 @@ const AddDrinkOverlay = ({afterCloseHandler}) => {
     const handleOk = async () => {
         try {
             const values = await form.validateFields();
-            const totalCrates = calculateCrates(values.ingredients);
 
-            const payload = { name: values.name, ingredients: values.ingredients, cratesNum: totalCrates};
+            const payload = { name: values.name, ingredients: values.ingredients};
             //onSubmit(payload); // Code stump, extend later for backend communication
-            console.log(payload.name + ' / ' + payload.cratesNum)
+            console.log(payload.name)
             console.log(payload.ingredients)
             form.resetFields();
 
@@ -81,9 +80,9 @@ const AddDrinkOverlay = ({afterCloseHandler}) => {
                                 ))}
 
                                 <Form.Item>
-                                <Button type="dashed" onClick={() => add({ volume: null, unit: 'ml', abv: null })} block>
-                                    {t('add_drink.add_liquid_label')}
-                                </Button>
+                                    <Button type="dashed" onClick={() => add({ volume: null, unit: 'ml', abv: null })} block>
+                                        {t('add_drink.add_liquid_label')}
+                                    </Button>
                                 </Form.Item>
                             </>
                         )}
