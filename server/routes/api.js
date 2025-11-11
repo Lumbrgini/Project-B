@@ -1,8 +1,30 @@
 import { Router } from "express";
+import { ObjectId } from 'mongodb';
 
 const router  = Router();
 
 router.get("/people", async (req, res) => {
+  try {
+    const db = req.app.get("db");              
+    const peopleCol = db.collection("users"); 
+
+    const docs = await peopleCol
+      .find({})
+      .project({ name: 1, drinks: 1 })
+      .toArray();
+
+    const rows = docs.map(d => ({
+      id: d._id.toString(),
+      name: d.name,
+      drink: d.drink ?? [],
+    }));
+
+    res.json(rows);
+  } catch(err) {
+    console.error(err);
+    res.status(500).send();
+  }
+  /*
   const rows = [{ 
       id: '1', 
       name: 'Bella', 
@@ -33,6 +55,7 @@ router.get("/people", async (req, res) => {
     },
   ];
   res.json(rows);
+  */
 });
 
 router.post("/people/add", async(req, res) => {
