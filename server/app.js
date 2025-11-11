@@ -36,7 +36,7 @@ app.use("/api", apiRouter);
 try {
   const client = new MongoClient(connectionString);
   await client.connect();
-  const db = client.db('demo');
+  const db = client.db('users');
   
   app.set('db', db);
 

@@ -10,7 +10,7 @@ router.get("/people", async (req, res) => {
 
     const docs = await peopleCol
       .find({})
-      .project({ name: 1, drinks: 1 })
+      .project({ name: 1, drink: 1 })
       .toArray();
 
     const rows = docs.map(d => ({
