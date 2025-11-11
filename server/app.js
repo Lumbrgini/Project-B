@@ -4,7 +4,11 @@ import cors from "cors";
 import morgan from "morgan";
 import apiRouter from "./routes/api.js";
 import { MongoClient } from "mongodb";
+import OAuthServer from 'express-oauth-server';
 import 'dotenv/config';
+import register from "./register.js";
+import oAuthModel from './oAuthModel.js';
+import api from "./routes/api.js"
 
 const app = express();
 const port = 3000;
@@ -25,16 +29,30 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/api", apiRouter);
 
 try {
   const client = new MongoClient(connectionString);
   await client.connect();
-  const db = client.db('users');
+  const db = client.db('demo');
+  
+  app.set('db', db);
 
-  app.set('db', db); // save a reference to the db to app config
+  // we add TTL indexes to expiration fields to automatically remove expired entries
+  db.collection('token').createIndex({ accessTokenExpiresAt: 1 }, { expireAfterSeconds: 0 });
+  db.collection('token').createIndex({ refreshTokenExpiresAt: 1 }, { expireAfterSeconds: 0 });
+  db.collection('token').createIndex({ emailTokenExpiresAt: 1 }, { expireAfterSeconds: 0 });
 
+  const oauth = new OAuthServer({ model: oAuthModel(db) }); // create oauth middleware
+  
+  // backend routes
+  app.use('/api/token', oauth.token({ requireClientAuthentication: { password: false, refresh_token: false } })); // use oauth token middleware
+  app.use('/api/register', register); // handle user registration
+  app.use('/api', oauth.authenticate(), api); // use oauth authentication middleware on any resource that should be protected
+
+  // start server
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
   });
