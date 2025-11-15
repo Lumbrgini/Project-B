@@ -3,11 +3,33 @@ import AddDrinkOverlay from '../components/addDrinkOverlay/addDrinkOverlay';
 import DrinkHistory from '../components/dashboard/drinkHistory/drinkHistory';
 import AllTimeStats from '../components/dashboard/allTimeStats/allTimeStats';
 import Status from '../components/dashboard/status/status';
+import {useEffect, useState} from 'react';
 
 const handleDrinkAdded = () => {
     console.log("fetch drinks")
     //fetchDrinks(); // reload after modal submit
 };
+
+// useEffect(() => {
+//   fetch("/api/people")
+//     .then(async res => {
+//         const text = await res.text();
+//         try{
+//           return (JSON.parse(text));
+//         }
+//         catch{
+//            return []; 
+//         }
+//       })
+//     .then(data => {
+//       const safe = Array.isArray(data) ? data : [];
+//         setPeople(safe);
+//     })
+//     .catch(err => {
+//       console.error(err);
+//       setPeople([]);
+//     });
+// }, []);
   
 
 const userData = {

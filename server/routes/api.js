@@ -3,20 +3,42 @@ import { ObjectId } from 'mongodb';
 
 const router  = Router();
 
-router.get("/people", async (req, res) => {
+router.get("/api/people", async (req, res) => {
   try {
     const db = req.app.get("db");              
     const peopleCol = db.collection("users"); 
 
     const docs = await peopleCol
       .find({})
-      .project({ name: 1, drink: 1 })
+      .project({})
       .toArray();
 
     const rows = docs.map(d => ({
       id: d._id.toString(),
       name: d.name,
-      drink: d.drink ?? [],
+      height: d.height,
+      weight: d.weight,
+      age: d.age,
+      drink: d.drink.map(([name, timeStamp, ...rest]) => {
+        let iso = null;
+
+        if(timeStamp && timeStamp._bsontype === "Timestamp"){
+          const seconds = timeStamp.getHighBits();
+          iso = new Date(seconds * 1000).toISOString();
+        };
+
+        const ingridients = rest
+          .map(([amount, alcdegree]) => ({
+            amount,
+            alcdegree
+          }));
+
+        return {
+          name,
+          date: iso,
+          ingridients
+        };
+      })
     }));
 
     res.json(rows);
@@ -24,38 +46,6 @@ router.get("/people", async (req, res) => {
     console.error(err);
     res.status(500).send();
   }
-  /*
-  const rows = [{ 
-      id: '1', 
-      name: 'Bella', 
-      drinks: [
-        {
-          drink_name: 'Cider',
-          amount: 0.5
-        }, 
-        {
-          drink_name: 'Jaegermeister',
-          amount: 0.2,
-        }
-      ]
-    },
-    {
-      id: '2', 
-      name: 'Victoria', 
-      drinks: [
-        {
-          drink_name: 'Cider',
-          amount: 1.0
-        }, 
-        {
-          drink_name: 'Jaegermeister',
-          amount: 0.5,
-        }
-      ]
-    },
-  ];
-  res.json(rows);
-  */
 });
 
 router.post("/people/add", async(req, res) => {

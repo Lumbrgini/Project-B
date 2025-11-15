@@ -50,6 +50,7 @@ try {
   // backend routes
   app.use('/api/token', oauth.token({ requireClientAuthentication: { password: false, refresh_token: false } })); // use oauth token middleware
   app.use('/api/register', register); // handle user registration
+  app.get('/api/people', apiRouter)
   app.use('/api', oauth.authenticate(), api); // use oauth authentication middleware on any resource that should be protected
 
   // start server
