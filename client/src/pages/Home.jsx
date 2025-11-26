@@ -69,13 +69,13 @@ function Home() {
             weight: safe.weight,
             age: safe.age,
             drinks: safe.drink.map(d => ({
-            name: d.name,
-            timestamp: new Date(d.date).getTime(), 
-            ingredients: d.ingridients.map(ing => ({
-                volume: ing.amount,   
-                unit: "ml",             
-                abv: ing.alcdegree       
-            }))
+                name: d.name,
+                timestamp: new Date(d.date).getTime(), 
+                ingredients: d.ingridients.map(ing => ({
+                    volume: ing.amount,   
+                    unit: "ml",             
+                    abv: ing.alcdegree       
+                }))
             }))
         };
 
