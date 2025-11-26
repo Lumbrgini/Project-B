@@ -10,29 +10,7 @@ const handleDrinkAdded = () => {
     //fetchDrinks(); // reload after modal submit
 };
 
-// useEffect(() => {
-//   fetch("/api/people")
-//     .then(async res => {
-//         const text = await res.text();
-//         try{
-//           return (JSON.parse(text));
-//         }
-//         catch{
-//            return []; 
-//         }
-//       })
-//     .then(data => {
-//       const safe = Array.isArray(data) ? data : [];
-//         setPeople(safe);
-//     })
-//     .catch(err => {
-//       console.error(err);
-//       setPeople([]);
-//     });
-// }, []);
-  
-
-const userData = {
+/*const userData = {
     id: 1,
     name: "Tester Testington1",
     height: 180,
@@ -58,10 +36,57 @@ const userData = {
             }],
         }
     ]
-}
+}*/
 
 function Home() {
+
     const { t, i18n } = useTranslation();
+    const [userData, setUserData] = useState(null);
+    
+
+    useEffect(() => {
+    fetch("/api/home")
+        .then(async res => {
+        if (!res.ok) return [];
+        const text = await res.text();
+        try {
+            return JSON.parse(text);
+        } catch {
+            return [];
+        }
+        })
+        .then(raw => {
+            const safe = Array.isArray(raw) ? raw[0] : null;
+            if (!safe) {
+                setUserData(null);
+                return;
+        }
+
+        const normalized = {
+            id: safe.id,
+            name: safe.name,
+            height: safe.height,
+            weight: safe.weight,
+            age: safe.age,
+            drinks: safe.drink.map(d => ({
+            name: d.name,
+            timestamp: new Date(d.date).getTime(), 
+            ingredients: d.ingridients.map(ing => ({
+                volume: ing.amount,   
+                unit: "ml",             
+                abv: ing.alcdegree       
+            }))
+            }))
+        };
+
+        setUserData(normalized);
+        })
+        .catch(err => {
+            console.error(err);
+            setUserData(null);
+        });
+    }, []); 
+
     return (
         <>
             <h1>{t('home.title')}</h1>
