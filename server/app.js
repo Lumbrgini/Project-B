@@ -55,7 +55,6 @@ try {
   app.get('/api/home', apiRouter);
   app.use('/api', oauth.authenticate(), api); // use oauth authentication middleware on any resource that should be protected
   
-
   // start server
   app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
