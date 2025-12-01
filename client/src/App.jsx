@@ -9,13 +9,12 @@ import { router } from './router';
 function App() {
   const { t , i18n } = useTranslation();
   const { Header, Content, Footer } = Layout;
-   const location = useLocation();
-   const isLoginPage = location.pathname === "/";
-
+  const location = useLocation();
+  const isLoginOrRegPage = ["/", "/login"].includes(location.pathname);
   return (
     <Layout style={{minHeight: '100vh', minWidth: '100vw'}}>
       <Header>
-          {!isLoginPage?<Nav/>:null}
+          {!isLoginOrRegPage && <Nav/>}
       </Header>
       <Content>
         <h2>{t('app.title')}</h2>

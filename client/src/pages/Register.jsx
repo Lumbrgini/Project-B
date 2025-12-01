@@ -39,7 +39,7 @@ function Register(){
     }
     return(
         <>
-            <h1>This is login page</h1>
+            <h1>This is registration page</h1>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="first_name">First name:</label><br/>
                 <input 
@@ -77,6 +77,9 @@ function Register(){
             </form>
 
             {status && <p>{status}</p>}
+            <br/><br/>
+            <p> Already have an account?</p>
+            <button onClick={() => navigate("/login")}>Go to login</button>
         </>
     )
 }

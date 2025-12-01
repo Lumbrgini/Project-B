@@ -1,4 +1,5 @@
 import express from 'express';
+import bcrypt from 'bcrypt';
 import { v4 } from 'uuid'
 
 const router = express.Router();
@@ -19,7 +20,7 @@ router.post('/', async (req, res) => {
         first_name: req.body.firstName,
         family_name: req.body.familyName,
         username: req.body.email,
-        password: req.body.password
+        password: await bcrypt.hash(req.body.password, 10),
       }
     );
     if(!validateEmail(req.body.email)){
