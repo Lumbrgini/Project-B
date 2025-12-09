@@ -48,12 +48,12 @@ try {
   const oauth = new OAuthServer({ model: oAuthModel(db) }); // create oauth middleware
   
   // backend routes
-  app.use('/api/login', apiRouter);
-  app.use('/api/token', oauth.token({ requireClientAuthentication: { password: false, refresh_token: false } })); // use oauth token middleware
-  app.use('/api/register', register); // handle user registration
-  app.get('/api/people', apiRouter);
-  app.get('/api/home', apiRouter);
-  app.use('/api', oauth.authenticate(), api); // use oauth authentication middleware on any resource that should be protected
+
+  app.post("/api/token", oauth.token({requireClientAuthentication: { password: false, refresh_token: false } })); 
+  app.use('/api/register', register);
+  app.get('/api/people', oauth.authenticate(), api);
+  app.get('/api/home', oauth.authenticate(), api);
+  app.use('/api', oauth.authenticate(), api); 
   
   // start server
   app.listen(port, () => {
