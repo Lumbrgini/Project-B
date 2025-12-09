@@ -10,34 +10,6 @@ const handleDrinkAdded = () => {
     //fetchDrinks(); // reload after modal submit
 };
 
-/*const userData = {
-    id: 1,
-    name: "Tester Testington1",
-    height: 180,
-    wight: 80,
-    age: 25,
-    drinks: [
-        {
-            name: "Mystery Beer 1",
-            timestamp: Date.now(),
-            ingredients: [{
-                volume: 0.33,
-                unit: "l",
-                abv: 5,
-            }],
-        },
-        {
-            name: "Mystery Beer 2",
-            timestamp: Date.now(),
-            ingredients: [{
-                volume: 0.33,
-                unit: "l",
-                abv: 5,
-            }],
-        }
-    ]
-}*/
-
 function Home() {
 
     const { t, i18n } = useTranslation();
@@ -45,16 +17,41 @@ function Home() {
     
 
     useEffect(() => {
-    fetch("/api/home")
-        .then(async res => {
-        if (!res.ok) return [];
-        const text = await res.text();
-        try {
-            return JSON.parse(text);
-        } catch {
-            return [];
+        const token = localStorage.getItem("accessToken");
+
+        if (!token) {
+            console.warn("No access token, user is not logged in");
+            setUserData(null);
+            return;
         }
+
+        fetch("/api/home", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+            },
         })
+
+        .then(async res => {
+            if (res.status === 401) {
+                console.warn("Unauthorized, maybe token expired");
+                setUserData(null);
+                return;
+            }
+
+            if (!res.ok) return [];
+
+            const text = await res.text();
+            let raw;
+            try {
+                raw = JSON.parse(text);
+            } catch {
+                raw = [];
+            }
+            return raw;
+        })
+
         .then(raw => {
             const safe = Array.isArray(raw) ? raw[0] : null;
             if (!safe) {

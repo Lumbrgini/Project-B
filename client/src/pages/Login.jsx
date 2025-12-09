@@ -1,6 +1,5 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import oAuthModel from "../../../server/oAuthModel";
 
 function Login(){
 
@@ -22,9 +21,9 @@ function Login(){
             },
             body: new URLSearchParams({
             grant_type: "password",
-            username: email,     // username === email (как в getUser)
+            username: email,   
             password: password,
-            client_id: "client", // тот самый id из oAuthModel
+            client_id: "client", 
             }),
         });
 
@@ -36,13 +35,13 @@ function Login(){
         const data = await res.json();
         console.log("Token response:", data);
 
-        localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
+
+
+        localStorage.setItem("accessToken", data.access_token);
+        localStorage.setItem("refreshToken", data.refresh_token);
 
         navigate("/home");
 
-        // TODO: сделать редирект или записать юзера в контекст
-        // navigate("/home") и т.п.
         } catch (err) {
           console.error(err);
           setError(err.message);
@@ -72,6 +71,7 @@ function Login(){
                 </input>
                 <br/><br/>
                 <button type="submit">Login</button>
+                
                 {error && <p style={{ color: "red" }}>{error}</p>}
             </form>
         </>

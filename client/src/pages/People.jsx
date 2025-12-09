@@ -6,26 +6,50 @@ function People() {
   const { t } = useTranslation();
   const [people, setPeople] = useState([]);
 
-useEffect(() => {
-  fetch("/api/people")
-    .then(async res => {
+  useEffect(() => {
+
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) {
+      console.warn("No access token, user is not logged in");
+      setUserData(null);
+      return;
+    }
+
+    fetch("/api/people", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    })
+      .then(async res => {
+
+        if (res.status === 401) {
+          console.warn("Unauthorized, maybe token expired");
+          setUserData(null);
+          return;
+        }
+
+        if (!res.ok) return [];
+        
         const text = await res.text();
         try{
           return (JSON.parse(text));
         }
         catch{
-           return []; 
+          return []; 
         }
       })
-    .then(data => {
-      const safe = Array.isArray(data) ? data : [];
-        setPeople(safe);
-    })
-    .catch(err => {
-      console.error(err);
-      setPeople([]);
-    });
-}, []);
+      .then(data => {
+        const safe = Array.isArray(data) ? data : [];
+          setPeople(safe);
+      })
+      .catch(err => {
+        console.error(err);
+        setPeople([]);
+      });
+  }, []);
 
   return (
     <>

@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 const client = {
   id: 'client',
   grants: ['password', 'refresh_token'],
@@ -24,8 +26,13 @@ export default function oAuthModel(db) {
       }
       return token;
     },
-    getUser(username, password) {
-      return db.collection('user_auth').findOne({ username, password });
+    async getUser(username, password) {
+      const user = await db.collection('user_auth').findOne({username});
+      if (user) {
+        const match = await bcrypt.compare(password, user.password);
+        if(match) return user;
+      }
+      return null;
     },
     async saveToken(token, client, user) {
       await db.collection('token').insertOne({ accessToken: token.accessToken, accessTokenExpiresAt: token.accessTokenExpiresAt, user_id: user._id });
