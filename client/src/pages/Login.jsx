@@ -44,10 +44,9 @@ function Login(){
 
         } catch (err) {
           console.error(err);
-          setError(err.message);
+          setError('Invalid E-Mail or password.');
       }
     }
-
 
     return(
         <>
