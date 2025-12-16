@@ -5,8 +5,10 @@ import {
   HomeOutlined,
   TeamOutlined,
   SettingOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import MenuItem from 'antd/es/menu/MenuItem';
+import LogoutButton from '../logoutButton/logoutButton';
 
 
 const Nav = () =>{
@@ -14,7 +16,8 @@ const Nav = () =>{
     const { t } = useTranslation();
     const items = [
         { key: "/home", label: <Link to="/home">{t('nav.buttons.dashboard')}</Link>, icon: <HomeOutlined /> },
-        { key: "/people", label: <Link to="/people">{t('nav.buttons.scoreboard')}</Link>, icon: <TeamOutlined /> }
+        { key: "/people", label: <Link to="/people">{t('nav.buttons.scoreboard')}</Link>, icon: <TeamOutlined /> },
+        { key: "/logout", label: <LogoutButton></LogoutButton>}
     ]
     
     return (
