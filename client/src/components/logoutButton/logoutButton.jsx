@@ -7,7 +7,7 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
-    navigate('/login'); // adjust route as needed
+    navigate('/login');
   };
 
   return (
