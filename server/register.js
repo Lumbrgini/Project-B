@@ -39,6 +39,10 @@ router.post("/", async (req, res) => {
       family_name: familyName.trim(),
       username: normalizedEmail,
       password: passwordHash,
+      drink: [],
+      age: null,
+      height: null,
+      weight: null,
     });
 
     const token = uuidv4();

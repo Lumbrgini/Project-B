@@ -77,7 +77,7 @@ export const useAlcCalc = () => {
  * @returns {Object} { currentBAC, hoursToSober, totalAlcoholMl }
  */
 const calcIntox = useCallback((userData) => {
-  if (!userData || !Array.isArray(userData.drinks) || userData.drinks.length === 0) {
+  if (!userData || !Array.isArray(userData.drinks) || userData.drinks.length === 0 || !userData.weight || !userData.height) {
     return { currentBAC: 0, hoursToSober: 0, totalAlcoholMl: 0 };
   }
 

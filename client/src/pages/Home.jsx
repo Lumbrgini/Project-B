@@ -4,6 +4,7 @@ import DrinkHistory from '../components/dashboard/drinkHistory/drinkHistory';
 import AllTimeStats from '../components/dashboard/allTimeStats/allTimeStats';
 import Status from '../components/dashboard/status/status';
 import {useEffect, useState} from 'react';
+import UserDataOverlay from  '../components/userDataOverlay/userDataOverlay'
 
 const handleDrinkAdded = () => {
     console.log("fetch drinks")
@@ -91,6 +92,7 @@ function Home() {
             <AllTimeStats userData={userData} />
             <Status userData={userData} />
             <AddDrinkOverlay afterCloseHandler={handleDrinkAdded} />
+            <UserDataOverlay />
         </>
     )
 }

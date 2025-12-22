@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ObjectId } from 'mongodb';
+import authMiddleware from "../middleware/auth.js";
 
 const router  = Router();
 
@@ -52,7 +53,7 @@ router.get("/api/home", async (req, res) => {
 
   try {
     const db = req.app.get("db");              
-    const peopleCol = db.collection("users"); 
+    const peopleCol = db.collection("user_auth"); 
 
     const docs = await peopleCol
       .find({})
@@ -94,28 +95,42 @@ router.get("/api/home", async (req, res) => {
   }
 });
 
-router.post("/people/add", async(req, res) => {
-  const {id, name, drinks } = req.body;
-  if (!id || !name || !drinks){
-    return res.status(400).json({
-       error: "ID, Name and drinks are required" 
-    });
-    // const created = await db.post.create({ data: { title }});
 
+router.put("/profile", authMiddleware, async (req, res) => {
+  try {
+    const db = req.app.get("db");
+    const userId = req.user.id;
+
+    const { age, height, weight } = req.body;
+
+    if (
+      typeof age !== "number" ||
+      typeof height !== "number" ||
+      typeof weight !== "number"
+    ) {
+      return res.status(400).json({ error: "INVALID_INPUT" });
+    }
+
+    const result = await db.collection("user").updateOne(
+      { _id: userId },
+      {
+        $set: {
+          age,
+          height,
+          weight,
+        },
+      }
+    );
+
+    if (result.matchedCount !== 1) {
+      return res.status(404).json({ error: "USER_NOT_FOUND" });
+    }
+
+    return res.status(200).json({ ok: true });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "SERVER_ERROR" });
   }
-   const created = {id: '3', 
-      name: 'Paul', 
-      drinks: [
-        {
-          drink_name: 'Beer',
-          amount: 1.0
-        }, 
-        {
-          drink_name: 'Jaegermeister',
-          amount: 0.5,
-        }
-      ]};
-    res.status(201).json(created);   
 });
 
 export default router;

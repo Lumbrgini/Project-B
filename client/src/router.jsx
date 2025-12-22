@@ -15,6 +15,7 @@ export const router = createBrowserRouter([
         errorElement: <NotFound />,
         children: [
             {path: "/", element: <Register/>},
+            {path: "/register", element: <Register/>},
             {path: "/login", element: <Login/>},
             {path: "/home", element: (
                 <RequireAuth>
