@@ -1,30 +1,18 @@
 import { useTranslation } from 'react-i18next';
-import AddDrinkOverlay from '../components/addDrinkOverlay/addDrinkOverlay';
+
 import DrinkHistory from '../components/dashboard/drinkHistory/drinkHistory';
 import AllTimeStats from '../components/dashboard/allTimeStats/allTimeStats';
 import Status from '../components/dashboard/status/status';
 import {useEffect, useState} from 'react';
-import UserDataOverlay from  '../components/userDataOverlay/userDataOverlay'
-
-const handleDrinkAdded = () => {
-    console.log("fetch drinks")
-    //fetchDrinks(); // reload after modal submit
-};
 
 function Home() {
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const [userData, setUserData] = useState(null);
     
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
-
-        if (!token) {
-            console.warn("No access token, user is not logged in");
-            setUserData(null);
-            return;
-        }
 
         fetch("/api/home", {
             method: "GET",
@@ -33,51 +21,46 @@ function Home() {
                 Accept: "application/json",
             },
         })
-
         .then(async res => {
             if (res.status === 401) {
                 console.warn("Unauthorized, maybe token expired");
                 setUserData(null);
-                return;
+                return null;
             }
 
-            if (!res.ok) return [];
-
-            const text = await res.text();
-            let raw;
-            try {
-                raw = JSON.parse(text);
-            } catch {
-                raw = [];
+            if (!res.ok) {
+                console.error("Fetch failed:", res.status);
+                setUserData(null);
+                return null;
             }
+
+            // parse JSON directly
+            const raw = await res.json();
+            console.log(raw)
             return raw;
         })
-
         .then(raw => {
-            const safe = Array.isArray(raw) ? raw[0] : null;
-            if (!safe) {
-                setUserData(null);
-                return;
-        }
+            if (!raw) return;
 
-        const normalized = {
-            id: safe.id,
-            name: safe.name,
-            height: safe.height,
-            weight: safe.weight,
-            age: safe.age,
-            drinks: safe.drink.map(d => ({
-                name: d.name,
-                timestamp: new Date(d.date).getTime(), 
-                ingredients: d.ingridients.map(ing => ({
-                    volume: ing.amount,   
-                    unit: "ml",             
-                    abv: ing.alcdegree       
-                }))
-            }))
-        };
-
-        setUserData(normalized);
+            const normalized = {
+                id: raw.id,
+                firstName: raw.first_name,
+                lastName: raw.family_name,
+                height: raw.height,
+                weight: raw.weight,
+                age: raw.age,
+                drinks: Array.isArray(raw.drinks) ? raw.drinks.map(d => ({
+                    name: d.name,
+                    timestamp: new Date(d.timestamp).getTime(),
+                    ingredients: d.ingredients.map(ing => ({
+                        volume: ing.volume,
+                        unit: ing.unit,
+                        abv: ing.abv
+                    }))
+                })) : []
+            };
+            
+            setUserData(normalized);
         })
         .catch(err => {
             console.error(err);
@@ -87,12 +70,17 @@ function Home() {
 
     return (
         <>
-            <h1>{t('home.title')}</h1>
+            
+            {
+                userData &&
+                <>
+                    <h1>{t('home.title2')}</h1>
+                    <span><em>{t('home.title1')} {userData.firstName} {userData.lastName}</em></span>
+                </>
+            }
             <DrinkHistory userData={userData} />
             <AllTimeStats userData={userData} />
             <Status userData={userData} />
-            <AddDrinkOverlay afterCloseHandler={handleDrinkAdded} />
-            <UserDataOverlay />
         </>
     )
 }

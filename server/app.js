@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 import cors from "cors";
 import morgan from "morgan";
-import apiRouter from "./routes/api.js";
 import { MongoClient } from "mongodb";
 import OAuthServer from 'express-oauth-server';
 import 'dotenv/config';
@@ -34,7 +33,6 @@ if (process.env.NODE_ENV === "production") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/api", apiRouter);
 
 try {
   const client = new MongoClient(connectionString);
@@ -54,8 +52,6 @@ try {
 
   app.post("/api/token", oauth.token({requireClientAuthentication: { password: false, refresh_token: false } })); 
   app.use('/api/register', register);
-  app.get('/api/people', oauth.authenticate(), api);
-  app.get('/api/home', oauth.authenticate(), api);
   app.use('/api', oauth.authenticate(), api); 
   
   // start server

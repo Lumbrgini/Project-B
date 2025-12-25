@@ -19,7 +19,7 @@ const AddDrinkOverlay = ({afterCloseHandler}) => {
             const values = await form.validateFields();
 
             const payload = { name: values.name, ingredients: values.ingredients};
-            //onSubmit(payload); // Code stump, extend later for backend communication
+            onSubmit(payload); // Code stump, extend later for backend communication
             console.log(payload.name)
             console.log(payload.ingredients)
             form.resetFields();
@@ -28,6 +28,27 @@ const AddDrinkOverlay = ({afterCloseHandler}) => {
         } catch (err) {
             console.log(err)
         }
+    };
+
+    const onSubmit = async (payload) => {
+    try {
+        const token = localStorage.getItem("accessToken");
+        const res = await fetch("/api/profile/drink", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "ADD_DRINK_FAILED");
+        
+        // Optionally refresh UI or re-fetch user profile here
+    } catch (err) {
+        console.error(err);
+    }
     };
 
     const handleCancel = () => {

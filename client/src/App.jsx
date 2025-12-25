@@ -4,7 +4,6 @@ import { useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";  
 import { Layout, Button } from 'antd';
 import Nav from './components/nav/nav.jsx';
-import { router } from './router';
 
 function App() {
   const { t , i18n } = useTranslation();
@@ -17,7 +16,6 @@ function App() {
           {!isLoginOrRegPage && <Nav/>}
       </Header>
       <Content>
-        <h2>{t('app.title')}</h2>
         <Outlet />
       </Content>
       <Footer>

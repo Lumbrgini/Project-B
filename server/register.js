@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
       family_name: familyName.trim(),
       username: normalizedEmail,
       password: passwordHash,
-      drink: [],
+      drinks: [],
       age: null,
       height: null,
       weight: null,

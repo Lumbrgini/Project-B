@@ -1,15 +1,38 @@
 {
-    "app.title": "Das ist App.jsx, hier wird das generelle layout vorgegeben",
-    "home.title": "Das ist Home.jsx, hier wird die landing page entstehen",
-    "people.title": "Nutzer werden hier angezeigt",
+    "home.title1": "Hallo",
+    "home.title2": "Übersicht",
+    "people.title": "Globale Rangliste ",
     "people.error": "Etwas ist beim Request von der Rangliste schiefgelaufen",
     "404.title": "Ups, hier ist etwas schiefgelaufen",
-    "add_drink.title": "Getränk Hinzufügen",
     "nav.buttons.dashboard": "Dashboard",
     "nav.buttons.scoreboard": "Rangliste",
+    "history.title": "Getränke Verlauf",
+    "history.noDrinks": "Kein Getränke Daten verfügbar",
+    "history.abv_placeholder": "% Alkoholgehalt",
+    "stats.title": "Gesamtstatistik",
+    "stats.totalLabel": "Reiner Konsumierter Alkohol",
+    "stats.cratesLabel": "Equivalent in Bierkisten",
+    "stats.cratesSuffix": "Kisten",
+    "status.title": "Aktueller Rauschzustand",
+    "status.bacLabel": "Geschätzter Blutalkoholwert",
+    "status.timeLabel": "Geschätzte Zeit bis zur Nüchternheit",
     "add_drink.title": "Getränk Hinzufügen",
     "add_drink.name_label": "Name:",
     "add_drink.volume_placeholder": "Menge",
     "add_drink.abv_placeholder": "Alkoholgehalt %",
-    "add_drink.add_liquid_label": "+ Zutat Hinzufügen"
+    "add_drink.add_liquid_label": "+ Zutat Hinzufügen",
+    "hours": "Stunden",
+    "profile": {
+    "edit": "Profil bearbeiten",
+    "age": "Alter",
+    "height_cm": "Größe (cm)",
+    "weight_kg": "Gewicht (kg)",
+
+    "age_required": "Bitte geben Sie Ihr Alter an",
+    "height_required": "Bitte geben Sie Ihre Größe an",
+    "weight_required": "Bitte geben Sie Ihr Gewicht an",
+
+    "updated_successfully": "Profil erfolgreich aktualisiert",
+    "update_failed": "Profil konnte nicht aktualisiert werden"
+  }
 }

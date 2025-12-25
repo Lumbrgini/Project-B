@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, List, Typography, Divider, Button } from "antd";
 import { RightOutlined, DownOutlined } from "@ant-design/icons";
 import { useAlcCalc } from "src/hooks/useAlcCalc";
@@ -6,8 +7,11 @@ import { useAlcCalc } from "src/hooks/useAlcCalc";
 const { Title, Text } = Typography;
 
 export default function DrinkHistory({ userData }) {
+
+  const { t } = useTranslation();
+
   if (!userData || !userData.drinks || userData.drinks.length === 0) {
-    return <Text type="secondary">No drink history available.</Text>;
+    return <Text type="secondary">{t('history.noDrinks')}</Text>;
   }
 
   // Show only last 10 drinks
@@ -15,7 +19,7 @@ export default function DrinkHistory({ userData }) {
 
   return (
     <Card
-      title={<Title level={3}>{userData.name}'s Recent Drinks</Title>}
+      title={<Title level={3}>{t('history.title')}</Title>}
       style={{ maxWidth: 800, margin: "2rem auto", boxShadow: "0 2px 8px #f0f1f2" }}
     >
       <List
@@ -28,6 +32,7 @@ export default function DrinkHistory({ userData }) {
 }
 
 function DrinkItem({ drink }) {
+    const { t } = useTranslation();
     const {calculateTotalAlcoholML, calculateTotalAlcoholG} = useAlcCalc();
     const [expanded, setExpanded] = useState(false);
 
@@ -73,7 +78,7 @@ function DrinkItem({ drink }) {
             <List.Item style={{ padding: "4px 0" }}>
               <Text>
                 {ing.volume}
-                {ing.unit} @ {ing.abv}% ABV
+                {ing.unit} @ {ing.abv} {t('history.abv_placeholder')}
               </Text>
             </List.Item>
           )}
