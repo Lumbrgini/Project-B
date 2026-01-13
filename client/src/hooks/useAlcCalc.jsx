@@ -45,15 +45,15 @@ export const useAlcCalc = () => {
    * Assumption: One crate = 24 bottles × 0.33L × 5% ABV
    */
   const convertToCrates = useCallback((grams) => {
-  const crateComponent = {
-    volume: 0.33,
-    unit: 'l',
-    abv: 5,
-  };
-  const bottlesPerCrate = 24;
-  const gramsPerCrate = alcoholToGrams(crateComponent) * bottlesPerCrate;
-  return grams / gramsPerCrate;
-}, [alcoholToGrams]);
+    const crateComponent = {
+      volume: 0.33,
+      unit: 'l',
+      abv: 5,
+    };
+    const bottlesPerCrate = 24;
+    const gramsPerCrate = alcoholToGrams(crateComponent) * bottlesPerCrate;
+    return grams / gramsPerCrate;
+  }, [alcoholToGrams]);
 
   /**
    * Combines calculateTotalAlcoholG and convertToCrates
@@ -76,50 +76,50 @@ export const useAlcCalc = () => {
  * @param {Array}  userData.drinks - Array of drink objects with timestamps, ingredients, and crates.
  * @returns {Object} { currentBAC, hoursToSober, totalAlcoholMl }
  */
-const calcIntox = useCallback((userData) => {
-  if (!userData || !Array.isArray(userData.drinks) || userData.drinks.length === 0 || !userData.weight || !userData.height) {
-    return { currentBAC: 0, hoursToSober: 0, totalAlcoholMl: 0 };
-  }
+  const calcIntox = useCallback((userData) => {
+    if (!userData || !Array.isArray(userData.drinks) || userData.drinks.length === 0 || !userData.weight || !userData.height) {
+      return { currentBAC: 0, hoursToSober: 0, totalAlcoholMl: 0 };
+    }
 
-  const now = Date.now();
-  const weightKg = parseFloat(userData.weight) || 80; // default weight
-  const r = 0.68; // body water constant (average for men)
+    const now = Date.now();
+    const weightKg = parseFloat(userData.weight) || 80; // default weight
+    const r = 0.68; // body water constant (average for men)
 
-  let totalAlcoholMl = 0;
-  let remainingAlcoholGrams = 0;
+    let totalAlcoholMl = 0;
+    let remainingAlcoholGrams = 0;
 
-  userData.drinks.forEach((drink) => {
-    if (!drink.ingredients || drink.ingredients.length === 0) return;
+    userData.drinks.forEach((drink) => {
+      if (!drink.ingredients || drink.ingredients.length === 0) return;
 
-    const drinkTime = new Date(drink.timestamp).getTime();
-    if (isNaN(drinkTime)) return;
+      const drinkTime = new Date(drink.timestamp).getTime();
+      if (isNaN(drinkTime)) return;
 
-    const hoursPassed = (now - drinkTime) / 1000 / 60 / 60;
+      const hoursPassed = (now - drinkTime) / 1000 / 60 / 60;
 
-    // Sum alcohol in milliliters and grams using existing helpers
-    const alcoholMl = calculateTotalAlcoholML(drink.ingredients);
-    const alcoholGrams = calculateTotalAlcoholG(drink.ingredients);
+      // Sum alcohol in milliliters and grams using existing helpers
+      const alcoholMl = calculateTotalAlcoholML(drink.ingredients);
+      const alcoholGrams = calculateTotalAlcoholG(drink.ingredients);
 
-    totalAlcoholMl += alcoholMl;
+      totalAlcoholMl += alcoholMl;
 
-    // Compute current BAC after metabolism (0.015 per hour)
-    const weightGrams = weightKg * 1000;
-    const initialBAC = (alcoholGrams / (weightGrams * r)) * 100;
-    const currentBAC = Math.max(initialBAC - hoursPassed * 0.015, 0);
+      // Compute current BAC after metabolism (0.015 per hour)
+      const weightGrams = weightKg * 1000;
+      const initialBAC = (alcoholGrams / (weightGrams * r)) * 100;
+      const currentBAC = Math.max(initialBAC - hoursPassed * 0.015, 0);
 
-    // Convert back to grams for accumulation
-    remainingAlcoholGrams += (currentBAC * weightKg * r) / 100;
-  });
+      // Convert back to grams for accumulation
+      remainingAlcoholGrams += (currentBAC * weightKg * r) / 100;
+    });
 
-  const totalBAC = (remainingAlcoholGrams / (weightKg * r)) * 100;
-  const hoursToSober = totalBAC / 0.015;
+    const totalBAC = (remainingAlcoholGrams / (weightKg * r)) * 100;
+    const hoursToSober = totalBAC / 0.015;
 
-  return {
-    currentBAC: parseFloat(totalBAC.toFixed(3)),
-    hoursToSober: parseFloat(hoursToSober.toFixed(1)),
-    totalAlcoholMl: parseFloat(totalAlcoholMl.toFixed(1)),
-  };
-}, [calculateTotalAlcoholML, calculateTotalAlcoholG]);
+    return {
+      currentBAC: parseFloat(totalBAC.toFixed(3)),
+      hoursToSober: parseFloat(hoursToSober.toFixed(1)),
+      totalAlcoholMl: parseFloat(totalAlcoholMl.toFixed(1)),
+    };
+  }, [calculateTotalAlcoholML, calculateTotalAlcoholG]);
 
 
   return {
@@ -129,6 +129,6 @@ const calcIntox = useCallback((userData) => {
     calculateTotalAlcoholML,
     convertToCrates,
     calculateCrates,
-    calcIntox
+    calcIntox,
   };
 };

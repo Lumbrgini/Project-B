@@ -28,6 +28,8 @@
     "vite-plugin-graphql-loader": "^4.0.4"
   },
   "devDependencies": {
+    "eslint": "^9.39.2",
+    "globals": "^17.0.0",
     "jest": "^30.2.0",
     "supertest": "^7.1.4"
   }

@@ -1,9 +1,9 @@
 
-import { useEffect, useMemo, useState } from "react";
-import { Table, Typography } from "antd";
-import { useTranslation } from "react-i18next";
-import { useAlcCalc } from "../hooks/useAlcCalc";
-import { Row, Col } from "antd";
+import { useEffect, useMemo, useState } from 'react';
+import { Table, Typography } from 'antd';
+import { useTranslation } from 'react-i18next';
+import { useAlcCalc } from '../hooks/useAlcCalc';
+import { Row, Col } from 'antd';
 
 const { Title, Text } = Typography;
 
@@ -14,13 +14,13 @@ function People() {
   const [people, setPeople] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem('accessToken');
     if (!token) return;
 
-    fetch("/api/people", {
+    fetch('/api/people', {
       headers: {
         Authorization: `Bearer ${token}`,
-        Accept: "application/json",
+        Accept: 'application/json',
       },
     })
       .then(res => (res.ok ? res.json() : []))
@@ -55,23 +55,23 @@ function People() {
 
   const columns = [
     {
-      title: t("people.rank"),
+      title: t('people.rank'),
       render: (_, __, index) => <strong>{index + 1}</strong>,
       width: 80,
     },
     {
-      title: t("people.name"),
-      dataIndex: "name",
+      title: t('people.name'),
+      dataIndex: 'name',
     },
     {
-      title: t("people.alcohol_ml"),
-      dataIndex: "alcoholMl",
+      title: t('people.alcohol_ml'),
+      dataIndex: 'alcoholMl',
       render: v => `${v.toFixed(1)} ml`,
       sorter: (a, b) => a.alcoholMl - b.alcoholMl,
     },
     {
-      title: t("people.crates"),
-      dataIndex: "crates",
+      title: t('people.crates'),
+      dataIndex: 'crates',
       render: v => v.toFixed(2),
       sorter: (a, b) => a.crates - b.crates,
     },
@@ -79,7 +79,7 @@ function People() {
 
   return (
     <>
-      <Title level={2}>{t("people.title")}</Title>
+      <Title level={2}>{t('people.title')}</Title>
 
       <Row justify="center">
         <Col xs={24} sm={22} md={20} lg={16} xl={14}>

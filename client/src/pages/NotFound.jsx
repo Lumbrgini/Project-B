@@ -7,7 +7,7 @@ function NotFound(){
     <>
       <h1>{t('404.title')}</h1>
     </>
-  )
+  );
 }
 
-export default NotFound
+export default NotFound;

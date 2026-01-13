@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, List, Typography, Divider, Button } from "antd";
-import { RightOutlined, DownOutlined } from "@ant-design/icons";
-import { useAlcCalc } from "src/hooks/useAlcCalc";
+import { Card, List, Typography, Divider, Button } from 'antd';
+import { RightOutlined, DownOutlined } from '@ant-design/icons';
+import { useAlcCalc } from 'src/hooks/useAlcCalc';
 
 const { Title, Text } = Typography;
 
@@ -20,7 +20,7 @@ export default function DrinkHistory({ userData }) {
   return (
     <Card
       title={<Title level={3}>{t('history.title')}</Title>}
-      style={{ maxWidth: 800, margin: "2rem auto", boxShadow: "0 2px 8px #f0f1f2" }}
+      style={{ maxWidth: 800, margin: '2rem auto', boxShadow: '0 2px 8px #f0f1f2' }}
     >
       <List
         itemLayout="vertical"
@@ -32,32 +32,32 @@ export default function DrinkHistory({ userData }) {
 }
 
 function DrinkItem({ drink }) {
-    const { t } = useTranslation();
-    const {calculateTotalAlcoholML, calculateTotalAlcoholG} = useAlcCalc();
-    const [expanded, setExpanded] = useState(false);
+  const { t } = useTranslation();
+  const {calculateTotalAlcoholML, calculateTotalAlcoholG} = useAlcCalc();
+  const [expanded, setExpanded] = useState(false);
 
-    const totalAlcoholMl = calculateTotalAlcoholML(drink.ingredients);
-    const totalAlcoholGrams = calculateTotalAlcoholG(drink.ingredients);
+  const totalAlcoholMl = calculateTotalAlcoholML(drink.ingredients);
+  const totalAlcoholGrams = calculateTotalAlcoholG(drink.ingredients);
 
   return (
     <List.Item
       style={{
-        background: "#fafafa",
+        background: '#fafafa',
         borderRadius: 12,
         marginBottom: 16,
-        padding: "1rem 1.5rem",
+        padding: '1rem 1.5rem',
       }}
     >
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          cursor: "pointer",
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          cursor: 'pointer',
         }}
         onClick={() => setExpanded(!expanded)}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {expanded ? <DownOutlined /> : <RightOutlined />}
           <Title level={4} style={{ margin: 0 }}>{drink.name}</Title>
         </div>
@@ -67,7 +67,7 @@ function DrinkItem({ drink }) {
         </Text>
       </div>
 
-      <Divider style={{ margin: "8px 0" }} />
+      <Divider style={{ margin: '8px 0' }} />
 
       {expanded && (
         <List
@@ -75,7 +75,7 @@ function DrinkItem({ drink }) {
           style={{ marginTop: 8 }}
           dataSource={drink.ingredients}
           renderItem={(ing) => (
-            <List.Item style={{ padding: "4px 0" }}>
+            <List.Item style={{ padding: '4px 0' }}>
               <Text>
                 {ing.volume}
                 {ing.unit} @ {ing.abv} {t('history.abv_placeholder')}
