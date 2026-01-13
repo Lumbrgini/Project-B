@@ -1,62 +1,46 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Form, Input, Button, Alert, Typography, Space } from "antd";
+
+const { Title, Text } = Typography;
 
 function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [familyName, setFamilyName] = useState("");
   const [error, setError] = useState(null);
-
   const navigate = useNavigate();
 
-  function validate() {
-    const e = email.trim().toLowerCase();
-    const fn = firstName.trim();
-    const ln = familyName.trim();
-
-    if (!fn) return "First name is required.";
-    if (!ln) return "Family name is required.";
-    if (!e) return "E-Mail is required.";
-
-    if (!password) return "Password is required.";
-
-    return null;
-  }
-
-  async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(values) {
     setError(null);
 
-    const msg = validate();
-    if (msg) {
-      setError(msg);
-      return;
-    }
+    const payload = {
+      firstName: values.firstName.trim(),
+      familyName: values.familyName.trim(),
+      email: values.email.trim().toLowerCase(),
+      password: values.password,
+    };
 
     try {
       const registerRes = await fetch("http://localhost:3000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          firstName: firstName.trim(),
-          familyName: familyName.trim(),
-          email: email.trim().toLowerCase(),
-          password,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!registerRes.ok) {
         const data = await registerRes.json().catch(() => ({}));
 
         if (registerRes.status === 409) {
-          throw new Error("This E-Mail is already registered.");
-        }
-        if (registerRes.status === 400) {
-          throw new Error(data.error || data.message || "Invalid registration data.");
+          throw new Error("This e-mail address is already registered.");
         }
 
-        throw new Error(data.error || data.message || "Registration failed. Try again.");
+        if (registerRes.status === 400) {
+          throw new Error(
+            data.error || data.message || "Invalid registration data."
+          );
+        }
+
+        throw new Error(
+          data.error || data.message || "Registration failed. Please try again."
+        );
       }
 
       const tokenRes = await fetch("http://localhost:3000/api/token", {
@@ -64,15 +48,18 @@ function Register() {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
           grant_type: "password",
-          username: email.trim().toLowerCase(),
-          password,
+          username: payload.email,
+          password: payload.password,
           client_id: "client",
         }),
       });
 
       if (!tokenRes.ok) {
         const data = await tokenRes.json().catch(() => ({}));
-        throw new Error(data.error || "Registered, but login failed. Please login manually.");
+        throw new Error(
+          data.error ||
+            "Registration succeeded, but automatic login failed."
+        );
       }
 
       const tokenData = await tokenRes.json();
@@ -88,55 +75,78 @@ function Register() {
   }
 
   return (
-    <>
-      <h1>This is registration page</h1>
+    <div style={{ maxWidth: 480, margin: "0 auto", paddingTop: 48 }}>
+      <Title level={2}>Register</Title>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="first_name">First name:</label><br />
-        <input
-          type="text"
-          id="first_name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+      {error && (
+        <Alert
+          type="error"
+          message={error}
+          showIcon
+          style={{ marginBottom: 16 }}
         />
-        <br /><br />
+      )}
 
-        <label htmlFor="family_name">Family name:</label><br />
-        <input
-          type="text"
-          id="family_name"
-          value={familyName}
-          onChange={(e) => setFamilyName(e.target.value)}
-        />
-        <br /><br />
+      <Form
+        layout="vertical"
+        onFinish={handleSubmit}
+        requiredMark={false}
+      >
+        <Form.Item
+          label="First name"
+          name="firstName"
+          rules={[
+            { required: true, message: "First name is required." },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-        <label htmlFor="email">Email:</label><br />
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <br /><br />
+        <Form.Item
+          label="Family name"
+          name="familyName"
+          rules={[
+            { required: true, message: "Family name is required." },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-        <label htmlFor="password">Password:</label><br />
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br /><br />
+        <Form.Item
+          label="Email"
+          name="email"
+          rules={[
+            { required: true, message: "E-mail is required." },
+            { type: "email", message: "Please enter a valid e-mail address." },
+          ]}
+        >
+          <Input />
+        </Form.Item>
 
-        <button type="submit">Register</button>
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            { required: true, message: "Password is required." },
+          ]}
+        >
+          <Input.Password />
+        </Form.Item>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            Register
+          </Button>
+        </Form.Item>
+      </Form>
 
-      <br /><br />
-      <p>Already have an account?</p>
-      <button onClick={() => navigate("/login")}>Go to login</button>
-    </>
+      <Space direction="vertical" size="small" style={{ marginTop: 16 }}>
+        <Text>Already have an account?</Text>
+        <Button type="link" onClick={() => navigate("/login")}>
+          Go to login
+        </Button>
+      </Space>
+    </div>
   );
 }
 
