@@ -7,13 +7,13 @@ const port = 3000;
 
 const userData = [
   { id: '1', name: 'Bella', drinks: [{
-      drink_name: 'Cider',
-      amount: 0.5
-    }, 
-    {
-      drink_name: 'Jaegermeister',
-      amount: 0.2,
-    }]
+    drink_name: 'Cider',
+    amount: 0.5,
+  }, 
+  {
+    drink_name: 'Jaegermeister',
+    amount: 0.2,
+  }],
   },
 
   { id: '2', 
@@ -21,12 +21,12 @@ const userData = [
     drinks: 
     [{
       drink_name: 'Cider',
-      amount: 1.0
+      amount: 1.0,
     }, 
     {
       drink_name: 'Jaegermeister',
       amount: 0.5,
-    }]
+    }],
   },
 ];
 

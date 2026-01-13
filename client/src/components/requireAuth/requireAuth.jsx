@@ -1,14 +1,14 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from 'react-router-dom';
 
 export default function RequireAuth({ children }) {
-    const token = localStorage.getItem('accessToken');
-    const location = useLocation();
+  const token = localStorage.getItem('accessToken');
+  const location = useLocation();
 
-    if(!token){
-        return (
-            <Navigate to="/" replace state={{ from: location }}/>
-        );
-    }
-    return children;
+  if(!token){
+    return (
+      <Navigate to="/" replace state={{ from: location }}/>
+    );
+  }
+  return children;
 }
 

@@ -42,6 +42,6 @@ export default function oAuthModel(db) {
     async revokeToken(token) {
       const deleted = await db.collection('token').deleteOne({ refreshToken: token.refreshToken });
       return deleted.deletedCount === 1;
-    }
+    },
   };
 }
