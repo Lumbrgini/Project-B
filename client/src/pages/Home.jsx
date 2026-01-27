@@ -70,6 +70,26 @@ function Home() {
       });
   }, []); 
 
+  const handleDeleteDrink = async (timestamp) => {
+    const accessToken = localStorage.getItem('accessToken');
+
+    setUserData((prev) => ({
+      ...prev,
+      drinks: prev.drinks.filter((d) => String(d.timestamp) !== String(timestamp)),
+    }));
+
+    const res = await fetch(`/api/drinks/${encodeURIComponent(timestamp)}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (!res.ok) {
+      console.error('Delete failed');
+    }
+  };
+
   return (
     <>
             
@@ -80,7 +100,7 @@ function Home() {
                   <span><em>{t('home.title1')}, {userData.firstName} {userData.lastName}</em></span><br/>
                 </>
       }
-      <DrinkHistory userData={userData} />
+      <DrinkHistory userData={userData} onDeleteDrink={handleDeleteDrink}/>
       <AllTimeStats userData={userData} />
       <Status userData={userData} />
     </>

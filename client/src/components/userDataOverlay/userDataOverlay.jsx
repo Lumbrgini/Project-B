@@ -15,7 +15,7 @@ const UserDataOverlay = () => {
       const values = await form.validateFields();
       setLoading(true);
 
-      const res = await fetch('http://localhost:3000/api/profile', {
+      const res = await fetch('/api/profile', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

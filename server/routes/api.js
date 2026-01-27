@@ -179,5 +179,40 @@ router.post('/profile/drink', async (req, res) => {
   }
 });
 
+router.delete('/drinks/:timestamp', async (req, res) => {
+  try {
+    const db = req.app.get('db');
+    const peopleCol = db.collection('user_auth');
+
+    const tokenString = req.headers.authorization?.split(' ')[1];
+    if (!tokenString) return res.status(401).json({ error: 'UNAUTHORIZED' });
+
+    const model = oAuthModel(db);
+    const token = await model.getAccessToken(tokenString);
+    if (!token || !token.user) return res.status(401).json({ error: 'INVALID_TOKEN' });
+
+    const user = token.user;
+
+    const ts = req.params.timestamp;
+    const tsDate = new Date(Number(ts)); 
+
+    if (Number.isNaN(tsDate.getTime())) {
+      return res.status(400).json({ error: 'INVALID_TIMESTAMP' });
+    }
+
+    // --- Pull drink by timestamp ---
+    const result = await peopleCol.updateOne(
+      { _id: new ObjectId(user._id) },
+      { $pull: { drinks: { timestamp: tsDate } }, $set: { updatedAt: new Date() } }
+    );
+
+    return res.json({ ok: true, modified: result.modifiedCount });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: 'INTERNAL_SERVER_ERROR' });
+  }
+});
+
+
 
 export default router;

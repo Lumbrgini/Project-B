@@ -6,7 +6,7 @@ import { useAlcCalc } from 'src/hooks/useAlcCalc';
 
 const { Title, Text } = Typography;
 
-export default function DrinkHistory({ userData }) {
+export default function DrinkHistory({ userData, onDeleteDrink }) {
 
   const { t } = useTranslation();
 
@@ -25,19 +25,24 @@ export default function DrinkHistory({ userData }) {
       <List
         itemLayout="vertical"
         dataSource={lastTenDrinks}
-        renderItem={(drink) => <DrinkItem key={drink.timestamp} drink={drink} />}
+        renderItem={(drink) => <DrinkItem key={drink.timestamp} drink={drink} onDeleteDrink={onDeleteDrink}/>}
       />
     </Card>
   );
 }
 
-function DrinkItem({ drink }) {
+function DrinkItem({ drink, onDeleteDrink }) {
   const { t } = useTranslation();
   const {calculateTotalAlcoholML, calculateTotalAlcoholG} = useAlcCalc();
   const [expanded, setExpanded] = useState(false);
 
   const totalAlcoholMl = calculateTotalAlcoholML(drink.ingredients);
   const totalAlcoholGrams = calculateTotalAlcoholG(drink.ingredients);
+
+  function deleteDrink(e) {
+    e.stopPropagation(); 
+    onDeleteDrink(drink.timestamp);
+  }
 
   return (
     <List.Item
@@ -80,6 +85,7 @@ function DrinkItem({ drink }) {
                 {ing.volume}
                 {ing.unit} @ {ing.abv} {t('history.abv_placeholder')}
               </Text>
+              <Button danger onClick={deleteDrink}>Delete </Button>
             </List.Item>
           )}
         />
