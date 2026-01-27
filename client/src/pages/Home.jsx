@@ -75,7 +75,7 @@ function Home() {
         userData &&
                 <>
                   <h1>{t('home.title2')}</h1>
-                  <span><em>{t('home.title1')} {userData.firstName} {userData.lastName}</em></span>
+                  <span><em>{t('home.title1')}, {userData.firstName} {userData.lastName}</em></span><br/>
                 </>
       }
       <DrinkHistory userData={userData} />
