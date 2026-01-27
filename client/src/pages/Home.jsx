@@ -36,7 +36,6 @@ function Home() {
 
         // parse JSON directly
         const raw = await res.json();
-        console.log(raw);
         return raw;
       })
       .then(raw => {

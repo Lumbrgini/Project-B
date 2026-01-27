@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Button, Form, InputNumber, message } from 'antd';
 import { useTranslation } from 'react-i18next';
 
@@ -8,7 +8,77 @@ const UserDataOverlay = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
-  const showModal = () => setIsModalOpen(true);
+  const [userData, setUserData] = useState(null);
+      
+  
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+  
+    fetch('/api/home', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: 'application/json',
+      },
+    })
+      .then(async res => {
+        if (res.status === 401) {
+          //console.warn('Unauthorized, maybe token expired');
+          setUserData(null);
+          return null;
+        }
+
+        if (!res.ok) {
+          console.error('Fetch failed:', res.status);
+          setUserData(null);
+          return null;
+        }
+
+        // parse JSON directly
+        const raw = await res.json();
+        return raw;
+      })
+      .then(raw => {
+        if (!raw) return;
+
+        const normalized = {
+          id: raw.id,
+          firstName: raw.first_name,
+          lastName: raw.family_name,
+          height: raw.height,
+          weight: raw.weight,
+          age: raw.age,
+          drinks: Array.isArray(raw.drinks) ? raw.drinks.map(d => ({
+            name: d.name,
+            timestamp: new Date(d.timestamp).getTime(),
+            ingredients: d.ingredients.map(ing => ({
+              volume: ing.volume,
+              unit: ing.unit,
+              abv: ing.abv,
+            })),
+          })) : [],
+        };
+            
+        setUserData(normalized);
+      })
+      .catch(err => {
+        console.error(err);
+        setUserData(null);
+      });
+  }, []); 
+
+
+  const showModal = () => {
+    if (userData) {
+      form.setFieldsValue({
+        age: userData.age,
+        height: userData.height,
+        weight: userData.weight,
+      });
+    }
+
+    setIsModalOpen(true);
+  };
 
   const handleOk = async () => {
     try {
@@ -57,15 +127,12 @@ const UserDataOverlay = () => {
         title={t('profile.edit')}
         open={isModalOpen}
         onOk={handleOk}
-        onCancel={handleCancel} 
+        onCancel={handleCancel}
         confirmLoading={loading}
         centered
         width={480}
       >
-        <Form
-          layout="vertical"
-          form={form}
-        >
+        <Form layout="vertical" form={form}>
           <Form.Item
             label={t('profile.age')}
             name="age"
@@ -99,6 +166,7 @@ const UserDataOverlay = () => {
             <InputNumber style={{ width: '100%' }} />
           </Form.Item>
         </Form>
+
       </Modal>
     </>
   );
