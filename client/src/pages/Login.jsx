@@ -85,9 +85,14 @@ function Login() {
           <Button type="primary" htmlType="submit" block>
                         Login
           </Button>
-          <Button type="secondary" onClick={() => {navigate('/register');}} block>
-                        Registration
+          <Button
+            block
+            style={{ background: '#6d94c2', borderColor: '#6d94c2', color: 'white', marginTop: '1vh' }}
+            onClick={() => navigate('/register')}
+          >
+            Registration
           </Button>
+
 
         </Form.Item>
       </Form>
