@@ -19,7 +19,7 @@ function Register() {
     };
 
     try {
-      const registerRes = await fetch('http://localhost:3000/api/register', {
+      const registerRes = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -43,7 +43,12 @@ function Register() {
         );
       }
 
-      const tokenRes = await fetch('http://localhost:3000/api/token', {
+      if (registerRes.ok) {
+        navigate('/check-email', { state: { email: payload.email } });
+        return;
+      }
+
+      const tokenRes = await fetch('/api/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
@@ -67,7 +72,7 @@ function Register() {
       localStorage.setItem('accessToken', tokenData.access_token);
       localStorage.setItem('refreshToken', tokenData.refresh_token);
 
-      navigate('/home');
+      
     } catch (err) {
       console.error(err);
       setError(err.message || 'Something went wrong.');

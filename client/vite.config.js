@@ -7,13 +7,14 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
+      // eslint-disable-next-line no-undef
       src: path.resolve(__dirname, './src'),
     },
   },
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'http://localhost:5000',
         changeOrigin: true,
       },
     },

@@ -13,7 +13,7 @@ function Login() {
     setError(null);
 
     try {
-      const res = await fetch('http://localhost:3000/api/token', {
+      const res = await fetch('/api/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -85,6 +85,10 @@ function Login() {
           <Button type="primary" htmlType="submit" block>
                         Login
           </Button>
+          <Button type="secondary" onClick={() => {navigate('/register');}} block>
+                        Registration
+          </Button>
+
         </Form.Item>
       </Form>
     </Card>

@@ -49,6 +49,10 @@ const AddDrinkOverlay = ({afterCloseHandler}) => {
     } catch (err) {
       console.error(err);
     }
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 200);
   };
 
   const handleCancel = () => {

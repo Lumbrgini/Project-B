@@ -23,6 +23,7 @@ function Home() {
     })
       .then(async res => {
         if (res.status === 401) {
+          // eslint-disable-next-line no-console
           console.warn('Unauthorized, maybe token expired');
           setUserData(null);
           return null;
@@ -36,6 +37,7 @@ function Home() {
 
         // parse JSON directly
         const raw = await res.json();
+        // eslint-disable-next-line no-console
         console.log(raw);
         return raw;
       })
@@ -75,7 +77,7 @@ function Home() {
         userData &&
                 <>
                   <h1>{t('home.title2')}</h1>
-                  <span><em>{t('home.title1')} {userData.firstName} {userData.lastName}</em></span>
+                  <span><em>{t('home.title1')}, {userData.firstName} {userData.lastName}</em></span><br/>
                 </>
       }
       <DrinkHistory userData={userData} />

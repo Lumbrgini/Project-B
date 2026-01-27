@@ -9,7 +9,7 @@ function App() {
   const { t , i18n } = useTranslation();
   const { Header, Content, Footer } = Layout;
   const location = useLocation();
-  const isLoginOrRegPage = ['/', '/login'].includes(location.pathname);
+  const isLoginOrRegPage = ['/','/register', '/login', '/check-email'].includes(location.pathname);
   return (
     <Layout style={{minHeight: '100vh', minWidth: '100vw'}}>
       <Header>

@@ -10,7 +10,7 @@ import oAuthModel from './oAuthModel.js';
 import api from './routes/api.js';
 
 const app = express();
-const port = 3000;
+const port = 5000;
 const connectionString = process.env.MONGODB_CONNECTION_STRING;
 
 app.use(morgan('dev'));

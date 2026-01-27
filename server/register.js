@@ -39,6 +39,7 @@ router.post('/', async (req, res) => {
       family_name: familyName.trim(),
       username: normalizedEmail,
       password: passwordHash,
+      is_active: false,
       drinks: [],
       age: null,
       height: null,
@@ -56,7 +57,7 @@ router.post('/', async (req, res) => {
       return res.status(500).json({ error: 'TOKEN_CREATE_FAILED' });
     }
 
-    console.log(`Activation link: http://localhost:3000/activate/${token}`);
+    console.log(`Activation link: http://localhost:5173/activate/${token}`);
 
     return res.status(201).json({ ok: true }); 
   } catch (err) {
@@ -73,31 +74,34 @@ router.put('/:token', async (req, res) => {
   try {
     const db = req.app.get('db');
 
-    const token = await db.collection('token').findOne({ emailToken: req.params.token });
-    if (!token) return res.status(401).json({ error: 'INVALID_TOKEN' });
+    const tokenDoc = await db.collection('token').findOne({ emailToken: req.params.token });
+    if (!tokenDoc) return res.status(401).json({ error: 'INVALID_TOKEN' });
 
-    if (t.emailTokenExpiresAt < new Date()) {
+    if (tokenDoc.emailTokenExpiresAt < new Date()) { 
       await db.collection('token').deleteOne({ emailToken: req.params.token });
       return res.status(410).json({ error: 'TOKEN_EXPIRED' });
     }
 
-    const { firstName, familyName, password } = req.body;
+    const userAuth = await db.collection('user_auth').findOne({ _id: tokenDoc.user_id });
+    if (!userAuth) return res.status(404).json({ error: 'USER_NOT_FOUND' });
+
+    if (userAuth.is_active) {
+      await db.collection('token').deleteOne({ emailToken: req.params.token });
+      return res.status(200).json({ ok: true, alreadyActive: true });
+    }
 
     const userInsertion = await db.collection('user').insertOne({
-      first_name: firstName.trim(),
-      family_name: familyName.trim(),
+      first_name: userAuth.first_name,
+      family_name: userAuth.family_name,
       permissions: { write: false },
       createdAt: new Date(),
     });
 
-    const passwordHash = await bcrypt.hash(password, 10);
-
     const updated = await db.collection('user_auth').updateOne(
-      { _id: token.user_id }, 
+      { _id: userAuth._id },
       {
         $set: {
-          password: passwordHash,
-          user_id: userInsertion.insertedId, 
+          user_id: userInsertion.insertedId,
           is_active: true,
         },
       },

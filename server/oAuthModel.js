@@ -8,7 +8,7 @@ const client = {
 export default function oAuthModel(db) {
   return {
     getClient() {
-      return client; // we do not handle multiple clients, thus we always return the hardcoded one
+      return client; 
     },
     async getAccessToken(accessToken) {
       const token = await db.collection('token').findOne({ accessToken: accessToken });
@@ -27,11 +27,15 @@ export default function oAuthModel(db) {
       return token;
     },
     async getUser(username, password) {
-      const user = await db.collection('user_auth').findOne({username});
-      if (user) {
-        const match = await bcrypt.compare(password, user.password);
-        if(match) return user;
-      }
+      const user = await db.collection('user_auth').findOne({ username });
+
+      if (!user) return null;
+
+      if (user.is_active !== true) return null;
+
+      const match = await bcrypt.compare(password, user.password);
+      if (match) return user;
+
       return null;
     },
     async saveToken(token, client, user) {

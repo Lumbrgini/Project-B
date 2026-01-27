@@ -5,6 +5,8 @@ import NotFound from './pages/NotFound.jsx';
 import People from './pages/People.jsx';
 import Register from './pages/Register.jsx';
 import Login from './pages/Login.jsx';
+import CheckEmail from './pages/CheckEmail.jsx';
+import Activate from './pages/Activate.jsx';
 import RequireAuth from './components/requireAuth/requireAuth.jsx';
 
 
@@ -17,6 +19,8 @@ export const router = createBrowserRouter([
       {path: '/', element: <Register/>},
       {path: '/register', element: <Register/>},
       {path: '/login', element: <Login/>},
+      {path: 'check-email', element: <CheckEmail/>},
+      {path: '/activate/:token', element: <Activate />},
       {path: '/home', element: (
         <RequireAuth>
           <Home/>
