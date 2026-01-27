@@ -1,8 +1,8 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { RouterProvider} from "react-router-dom";
-import { router } from './router.jsx'
-import './index.css'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { RouterProvider} from 'react-router-dom';
+import { router } from './router.jsx';
+import './index.css';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './i18n/en.json';
