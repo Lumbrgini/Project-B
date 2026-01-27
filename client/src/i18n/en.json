@@ -1,6 +1,38 @@
 {
-    "app.title": "This is the App.jsx page where the genreal layout is defined",
-    "home.title": "This is the Home.jsx, here the landing page will be made",
-    "people.title": "People will be displayed here",
-    "404.title": "Oops, something went wrong..."
+    "home.title1": "Hello",
+    "home.title2": "Dashboard",
+    "people.title": "Globale Scoreboard",
+    "people.error": "Something went wrong during request of the scoreboard",
+    "404.title": "Oops, something went wrong...",
+    "add_drink.title": "Add a Drink",
+    "history.title": "Drink History",
+    "history.noDrinks": "No drink data available.",
+    "history.abv_placeholder": "% ABV",
+    "stats.title": "All Time Stats",
+    "stats.totalLabel": "Total Pure Alcohol Consumed",
+    "stats.cratesLabel": "Equivalent Beer Crates",
+    "stats.cratesSuffix": "crates",
+    "status.title": "Current Intoxication",
+    "status.bacLabel": "Estimated BAC",
+    "status.timeLabel": "Estimated time to sober",
+    "nav.buttons.dashboard": "Dashboard",
+    "nav.buttons.scoreboard": "Scoreboard",
+    "add_drink.name_label": "Name:",
+    "add_drink.volume_placeholder": "Volume",
+    "add_drink.abv_placeholder": "ABV %",
+    "add_drink.add_liquid_label": "+ Add Liquid",
+    "hours": "hours",
+    "profile": {
+    "edit": "Edit profile",
+    "age": "Age",
+    "height_cm": "Height (cm)",
+    "weight_kg": "Weight (kg)",
+
+    "age_required": "Please enter your age",
+    "height_required": "Please enter your height",
+    "weight_required": "Please enter your weight",
+
+    "updated_successfully": "Profile updated successfully",
+    "update_failed": "Failed to update profile"
+  }
 }
